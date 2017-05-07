@@ -1,0 +1,147 @@
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+<h1>AXIS 215PTZ</h1>
+<body onload="init()">
+<main>
+<img id="stream" src="http://172.23.49.1/mjpg/video.mjpg" width="704" height="576" alt="Press Reload if no image is displayed" border="0" style="cursor: crosshair;">
+<div id="sliders">
+ <h2>Tilt</h2>
+ <input type="range" id="tilt" min="-180" max="180" onchange="tilt()"/>
+ <h2>Pan</h2>
+ <input type="range" id="pan" min="-180" max="180" onchange="pan()"/>
+ <h2>Zoom</h2>
+ <input type="range" id="zoom" value="1"  min="1" max="9999" onchange="zoom()"/>
+ <h2>Focus</h2>
+ <input type="range" id="focus" min="1" max="9999" onchange="focus()"/>
+</div>
+<div id="buttons">
+ <button onclick="clickUp()">Up</button>
+ <button onclick="clickLeft()">Left</button>
+ <button onclick="clickDown()">Down</button>
+ <button onclick="clickRight()">Right</button>
+</div>
+</main>
+</body>
+<script>
+var password = "tasjekoffie";
+function pan(){
+	panValue = document.getElementById("pan").value;
+        $.ajax({
+                        type: 'GET',
+                        url:"http://172.23.49.1/axis-cgi/com/ptz.cgi?pan="+panValue,
+                        dataType: 'jsonp',
+                        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', make_base_auth("student", password));},
+                        success: function(){}
+                });
+}
+function tilt(){
+	tiltValue = document.getElementById("tilt").value;
+        $.ajax({
+                        type: 'GET',
+                        url:"http://172.23.49.1/axis-cgi/com/ptz.cgi?tilt="+tiltValue,
+                        dataType: 'jsonp',
+                        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', make_base_auth("student", password));},
+                        success: function(){}
+                });
+}
+function focus(){
+	focusValue = document.getElementById("focus").value;
+        $.ajax({
+                        type: 'GET',
+                        url:"http://172.23.49.1/axis-cgi/com/ptz.cgi?focus="+focusValue,
+                        dataType: 'jsonp',
+                        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', make_base_auth("student", password));},
+                        success: function(){}
+                });
+
+
+}
+function zoom(){
+	zoomValue = document.getElementById("zoom").value;
+	$.ajax({
+                        type: 'GET',
+                        url:"http://172.23.49.1/axis-cgi/com/ptz.cgi?zoom="+zoomValue,
+                        dataType: 'jsonp',
+                        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', make_base_auth("student", password));},
+                        success: function(){}
+                });
+}
+function init(){
+		$.ajax({
+                        type: 'GET',
+                        url:"http://172.23.49.1/axis-cgi/com/ptz.cgi?move=home",
+                        dataType: 'jsonp',
+                        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', make_base_auth("student", password));},
+                        success: function(){}
+                });
+
+		$.ajax({
+                        type: 'GET',
+                        url:"http://172.23.49.1/axis-cgi/com/ptz.cgi?continuouspantiltmove=20,0",
+                        dataType: 'jsonp',
+                        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', make_base_auth("student", password));},
+                        success: function(){}
+                });
+
+}
+function make_base_auth(user, password){
+        var tok = user + ':' + password;
+        var hash = btoa(tok);
+        return "Basic " + hash;}
+function stop(){
+		$.ajax({
+                        type: 'GET',
+                        url:"http://172.23.49.1/axis-cgi/com/ptz.cgi?continuouspantiltmove=0,0",
+                        dataType: 'jsonp',
+                        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', make_base_auth("student", password));},
+                        success: function(){}
+                });
+
+
+}
+function clickUp(){
+		stop();
+                $.ajax({
+                        type: 'GET',
+                        url:"http://172.23.49.1/axis-cgi/com/ptz.cgi?move=up",
+			dataType: 'jsonp',
+                        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', make_base_auth("student", password));},
+                        success: function(){}
+                });
+        }
+function clickLeft(){
+		stop();
+                $.ajax({
+                        type: 'GET',
+                        url:"http://172.23.49.1/axis-cgi/com/ptz.cgi?move=left",
+                        dataType: 'jsonp',
+                        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', make_base_auth("student", password));},
+                        success: function(){}
+                });
+      }
+function clickDown(){
+		stop();
+                $.ajax({
+                        type: 'GET',
+                        url:"http://172.23.49.1/axis-cgi/com/ptz.cgi?move=down",
+                        dataType: 'jsonp',
+                        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', make_base_auth("student", password));},
+                        success: function(){}
+                });
+        }
+function clickRight(){
+		stop();
+                $.ajax({
+                        type: 'GET',
+                        url:"http://172.23.49.1/axis-cgi/com/ptz.cgi?move=right",
+                        dataType: 'jsonp',
+                        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', make_base_auth("student", password));},
+                        success: function(){}
+                });
+        }
+
+
+
+</script>
+
